@@ -1,0 +1,119 @@
+
+#******************** Settings ************************
+
+*** Settings ***
+
+# TODO: Write Documentation e.g. Project Test scenario. CRUD Operation: Create, Read, Update, Delete
+
+Documentation	GitLab Project Management Test Scenarios - Covers Create, Read, Update, and Delete operations for GitLab Projects
+
+# TODO: Write Precondition, Postcondition, Tags
+
+Pre Condition     User must have a valid GitLab account and be logged in
+Post Condition    Projects are created, renamed, or error messages are validated depending on the test
+Tags	GitLab    ProjectManagement    CRUD
+
+#******************* Common Variables ********************
+
+*** Variables ***
+
+# NOTE: Please Remove your login credential before uploading Assignments
+
+# TODO: Write Project creation field variables
+
+GitLabUrl = https://gitlab.com/
+Valid_Username			roynykanen
+Valid_Password			************
+Valid_ProjectName  		MyTestProject
+Valid_ProjectName_2  	MyTestProject2
+New_ProjectName			RenamedTestProject
+Invalid_ProjectName		???Invalid##Name
+Existing_ProjectName	MyTestProject
+Sample_Template			NodeJS Express App
+
+
+#******************** Test Cases *************************
+
+*** Test Case ***
+
+# TODO: Write Positive and Negative Test Cases and Test Process steps
+
+# Positive Tests
+
+Create Blank Project
+    Navigate To GitLab Home Page    GitLabUrl
+    Log In With Valid Credentials    Valid_Username    Valid_Password
+    Click New Project Button
+    Click Create Blank Project Option
+    Input Project Name    Valid_ProjectName
+    Select Visibility Level    Private
+    Check Initialize With README Option
+    Submit Create Project Form
+    Verify Page Should Contain    Project was successfully created
+
+Create From Template
+    Navigate To GitLab Home Page    GitLabUrl
+    Log In With Valid Credentials    Valid_Username    Valid_Password
+    Click New Project Button
+    Click Create From Template Option
+    Select Template    Sample_Template	
+    Input Project Name    Valid_ProjectName_2
+	Select Visibility Level    Private
+    Submit Create Project Form
+    Verify Page Should Contain    The project was successfully imported
+
+Rename Project
+    Navigate To GitLab Home Page    GitLabUrl
+    Log In With Valid Credentials    Valid_Username    Valid_Password
+    Go To Existing Project Settings
+    Click Edit Project Name
+    Input New Name    New_ProjectName
+    Save Project Settings
+    Verify Page Should Contain    Successfully updated
+
+Delete Project
+    Navigate To GitLab Home Page    GitLabUrl
+    Log In With Valid Credentials    Valid_Username    Valid_Password
+    Go To Existing Project Settings
+    Click Delete Project Button
+ 	Confirm Delete Action
+    Verify Page Should Contain    Your project was successfully deleted
+
+
+# Negative Tests
+
+Create Project With Empty Name
+    Navigate To GitLab Home Page    GitLabUrl
+    Log In With Valid Credentials    Valid_Username    Valid_Password
+    Click New Project Button
+    Click Create Blank Project Option
+    Leave Project Name Empty
+    Submit Create Project Form
+    Verify Error Should Be Visible    Project name can't be blank
+
+Create Project With Invalid Characters In Name
+    Navigate To GitLab Home Page    GitLabUrl
+    Log In With Valid Credentials    Valid_Username    Valid_Password
+    Click New Project Button
+    Click Create Blank Project Option
+    Input Project Name    Invalid_ProjectName
+    Submit Create Project Form
+    Verify Error Should Be Visible    Project name can contain only letters, numbers, underscores, and dashes
+
+Create Duplicate Project
+    Navigate To GitLab Home Page    GitLabUrl
+    Log In With Valid Credentials    Valid_Username    Valid_Password
+    Click New Project Button
+    Click Create Blank Project Option
+    Input Project Name    Existing_ProjectName
+    Submit Create Project Form
+    Verify Error Should Be Visible    Project already exists
+
+Rename Project With Empty Name
+    Navigate To GitLab Home Page    GitLabUrl
+    Log In With Valid Credentials    Valid_Username    Valid_Password
+    Go To Existing Project Settings
+    Click Edit Project Name
+    Leave Project Name Field Empty
+    Save Project Settings
+    Verify Error Should Be Visible    Project name can't be blank

@@ -1,0 +1,91 @@
+
+#******************** Settings ************************
+
+*** Settings ***
+Documentation	Issue Test scenario. CRUD Operation: Create, Read, Update, Delete
+
+# TODO: Write Precondition and Postcondition, Tags 
+
+Pre Condition     Project must be created by the user before
+Post Condition    Created issues will be deleted after the test
+Tags	Issue CRUD
+
+#******************* Common Variables ********************
+
+
+*** Variables ***
+
+# NOTE: Please Remove your login credential before uploading Assignments
+
+# TODO: Write Issue creation field variables, Updated name of the issue
+
+GitLabUrl = https://gitlab.com
+Valid_Username			roynykanen
+Valid_Password			************
+Issue_Title_1			First Test Issue
+Issue_Title_Updated		Updated Test Issue
+Issue_Description		This is a sample test issue.
+Issue_Title_2			Updated Test Issue
+Empty 
+
+
+
+#******************** Test Cases *************************
+
+*** Test Case ***
+
+# TODO: Write Positive Test Cases and Test Process steps
+
+# Positive Tests
+
+Create Issue
+    Navigate To GitLab Home Page    GitLabUrl
+    Log In With Valid Credentials    Valid_Username    Valid_Password
+    Navigate To Issues Page
+    Click Create New Issue
+    Input Issue Title    Issue_Title_1
+    Input Issue Description    Issue_Description
+    Submit Issue
+    Verify Issue Created    Issue_Title_1
+
+Update Name Of Issue
+    Navigate To GitLab Home Page    GitLabUrl
+    Log In With Valid Credentials    Valid_Username    Valid_Password
+    Go To Issues Page
+    Open Issue By Title    Issue_Title_1
+    Click Edit Title
+    Input New Title    Issue_Title_Updated
+    Save Issue Changes
+    Verify Issue Title Is Updated    Issue_Title_Updated
+
+Create Second Issue With Previous Updated Name
+    Navigate To GitLab Home Page    GitLabUrl
+    Log In With Valid Credentials    Valid_Username    Valid_Password
+    Navigate To Issues Page
+    Click Create New Issue
+    Input Issue Title    Issue_Title_2
+    Input Issue Description    Issue_Description
+    Submit Issue
+    Verify Issue Created    Issue_Title_2
+
+Delete First Issue
+    Navigate To GitLab Home Page    GitLabUrl
+    Log In With Valid Credentials    Valid_Username    Valid_Password
+    Go To Issues Page
+    Open Issue By Title    Issue_Title_Updated
+    Click Delete Issue
+    Confirm Delete Action
+    Verify Issue Is Deleted    Issue_Title_Updated
+
+
+# Negative Tests
+
+Create Issue with Empty Name
+    Navigate To GitLab Home Page    GitLabUrl
+    Log In With Valid Credentials    Valid_Username    Valid_Password
+    Navigate To Issues Page
+    Click Create New Issue
+    Input Issue Title    Empty
+    Input Issue Description    Issue_Description
+    Create Issue
+    Verify Error Should Be Visible    Issue Title can't be blank

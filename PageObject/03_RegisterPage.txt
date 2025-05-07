@@ -1,0 +1,136 @@
+
+#******************** Settings ************************
+
+*** Settings ***
+
+# TODO: Write Documentation e.g. User Registration Test scenario with verification, valid and invalid credentials.
+
+Documentation	Testing the registration functionality of GitLab with valid and invalid inputs.
+
+# TODO: Write Precondition, Postcondition, Tags
+
+Pre Condition	Open Browser
+Post Condition	Close All Browsers
+Tags	Registration, TS-2-Registration
+
+#******************* Common Variables ********************
+
+*** Variables ***
+
+# NOTE: Please Remove your login credential before uploading Assignments
+
+# TODO: Write Registration field variables
+
+RegisterUrl = https://gitlab.com/users/sign_up
+Valid_FirstName     Roy
+Valid_LastName      Nykänen
+Valid_Username	    roynykanen
+Valid_Email         ron00003@laurea.fi
+Valid_Password      ************
+
+Invalid_Username   roynykanen!@#
+Invalid_Email      notanemail
+Invalid_Password   password
+Invalid_Password_2 r2B7xPaM9NcY5JvtK3LzWdUXEqCfGH1o0RbFAn8m4qVsljTeyODIZpwuX6gMhQkYcTSbn3LRAEfd97WovxJuMCgKt5HzNPXYaPaM9NcY5JvtK3LzWdUXEqCr2B7xPaM9NcY5JvtK3LzWdUXEqCfGH1o0RbFAn8m4qVsljTeyODIZpwuX6gMhQkYcTSbn3LRAEfd97WovxJuMCgKt5HzNPXYaPaM9NcY5JvtK3LzWdUXEqCfGH1o03
+Empty        
+
+
+
+#******************** Test Cases *************************
+
+*** Test Case ***
+
+# TODO: Write Positive and Negative Test Cases and Test Process steps (Think about possible test cases)
+
+# Positive Tests
+
+Registration With Valid Data
+    Navigate To Registration Page    RegisterUrl
+    Input First Name    Valid_FirstName
+    Input Last Name     Valid_LastName
+    Input Username      Valid_Username
+    Input Email         Valid_Email
+    Input Password      Valid_Password
+    Check Consent Checkbox
+    Submit Registration Form
+    Verify Page Should Contain Verify Email Sent
+
+
+# Negative Tests
+
+Registration With Empty Fields
+    Navigate To Registration Page    RegisterUrl
+    Input First Name    Empty
+    Input Last Name     Empty
+    Input Username      Empty
+    Input Email         Empty
+    Input Password      Empty
+	Check Consent Checkbox
+    Submit Registration Form
+    Verify Error Should Be Visible    This field is required.
+
+Registration With Invalid Username
+    Navigate To Registration Page    RegisterUrl
+    Input First Name    Valid_FirstName
+    Input Last Name     Valid_LastName
+    Input Username      Invalid_Username
+    Input Email         Valid_Email
+    Input Password      Valid_Password
+	Check Consent Checkbox
+    Submit Registration Form
+    Verify Error Should Be Visible    Please create a username with only alphanumeric characters.
+
+Registration With Invalid Email
+    Navigate To Registration Page    RegisterUrl
+    Input First Name    Valid_FirstName
+    Input Last Name     Valid_LastName
+    Input Username      Valid_Username
+    Input Email         Invalid_Email
+    Input Password      Valid_Password
+	Check Consent Checkbox
+    Submit Registration Form
+    Verify Error Should Be Visible    Please provide a valid email address.
+
+Registration With Too Short Password
+    Navigate To Registration Page    RegisterUrl
+    Input First Name    Valid_FirstName
+    Input Last Name     Valid_LastName
+    Input Username      Valid_Username
+    Input Email         Valid_Email
+    Input Password      Valid_FirstName
+	Check Consent Checkbox
+    Submit Registration Form
+    Verify Error Should Be Visible    Must be between 8-128 characters
+
+Registration With Too Long Password
+    Navigate To Registration Page    RegisterUrl
+    Input First Name    Valid_FirstName
+    Input Last Name     Valid_LastName
+    Input Username      Valid_Username
+    Input Email         Valid_Email
+    Input Password      Invalid_Password_2
+	Check Consent Checkbox
+    Submit Registration Form
+    Verify Error Should Be Visible    Must be between 8-128 characters
+
+Registration With Weak Password
+    Navigate To Registration Page    RegisterUrl
+    Input First Name    Valid_FirstName
+    Input Last Name     Valid_LastName
+    Input Username      Valid_Username
+    Input Email         Valid_Email
+    Input Password      Invalid_Password
+	Check Consent Checkbox
+    Submit Registration Form
+    Verify Error Should Be Visible    Cannot use common phrases
+
+Registration With Password Containing Name Or Email
+    Navigate To Registration Page    RegisterUrl
+    Input First Name    Valid_FirstName
+    Input Last Name     Valid_LastName
+    Input Username      Valid_Username
+    Input Email         Valid_Email
+    Input Password      Valid_Username
+	Check Consent Checkbox
+    Submit Registration Form
+    Verify Error Should Be Visible    Cannot include your name, username, or email
